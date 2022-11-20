@@ -7,13 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Augua.SharedKernel.WebApps\Augua.SharedKernel.WebApps.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="ClientApp\src\app\" />
     <Folder Include="ClientApp\src\assets\" />
     <Folder Include="ClientApp\src\environments\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\SharedKernel\Augua.SharedKernel.WebApps\Augua.SharedKernel.WebApps.csproj" />
   </ItemGroup>
 
 </Project>
