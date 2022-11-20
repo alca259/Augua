@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33110.190
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Service", "Service", "{75D729D8-1D7E-47F8-9B89-CB702B053CCB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web Apps", "Web Apps", "{27E84963-40A5-434B-A5F2-C9E9D8D8E2F0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Augua.Nexus.API", "Service\Augua.Nexus.API\Augua.Nexus.API.csproj", "{F484E1D6-FC37-4A6D-88AE-9D7FD7C6E21F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Augua.SharedKernel.WebApps", "Web Apps\Augua.SharedKernel.WebApps\Augua.SharedKernel.WebApps.csproj", "{34564B08-BDF0-4A7B-A127-01C8245F2F0A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Augua.NexusWeb", "Web Apps\Augua.NexusWeb\Augua.NexusWeb.csproj", "{BE9A1345-4947-4FEB-9651-F0F1302E98A7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F484E1D6-FC37-4A6D-88AE-9D7FD7C6E21F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F484E1D6-FC37-4A6D-88AE-9D7FD7C6E21F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F484E1D6-FC37-4A6D-88AE-9D7FD7C6E21F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F484E1D6-FC37-4A6D-88AE-9D7FD7C6E21F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34564B08-BDF0-4A7B-A127-01C8245F2F0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34564B08-BDF0-4A7B-A127-01C8245F2F0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34564B08-BDF0-4A7B-A127-01C8245F2F0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34564B08-BDF0-4A7B-A127-01C8245F2F0A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE9A1345-4947-4FEB-9651-F0F1302E98A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE9A1345-4947-4FEB-9651-F0F1302E98A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE9A1345-4947-4FEB-9651-F0F1302E98A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE9A1345-4947-4FEB-9651-F0F1302E98A7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F484E1D6-FC37-4A6D-88AE-9D7FD7C6E21F} = {75D729D8-1D7E-47F8-9B89-CB702B053CCB}
+		{34564B08-BDF0-4A7B-A127-01C8245F2F0A} = {27E84963-40A5-434B-A5F2-C9E9D8D8E2F0}
+		{BE9A1345-4947-4FEB-9651-F0F1302E98A7} = {27E84963-40A5-434B-A5F2-C9E9D8D8E2F0}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {684C968F-F536-4FDD-A8E1-30D7EEAB8415}
+	EndGlobalSection
+EndGlobal
