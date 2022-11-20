@@ -35,6 +35,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Augua.Nexus.API", "Nexus\Se
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Augua.NexusWeb", "Nexus\Web Apps\Augua.NexusWeb\Augua.NexusWeb.csproj", "{11A0DF5A-9D1B-4546-A136-7076BC2EBDC9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Augua.SharedKernel.API", "SharedKernel\Augua.SharedKernel.API\Augua.SharedKernel.API.csproj", "{3188F75B-7D42-4064-AE2B-17ED3614FEAB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Augua.SharedKernel.Utils", "SharedKernel\Augua.SharedKernel.Utils\Augua.SharedKernel.Utils.csproj", "{10176BD0-B4C5-44D6-A335-B9792E72E7EB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Augua.SharedKernel.JsonUtils", "SharedKernel\Augua.SharedKernel.JsonUtils\Augua.SharedKernel.JsonUtils.csproj", "{D4816956-7EA0-4B78-8BB5-A2ACA4AAA24F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +59,18 @@ Global
 		{11A0DF5A-9D1B-4546-A136-7076BC2EBDC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{11A0DF5A-9D1B-4546-A136-7076BC2EBDC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{11A0DF5A-9D1B-4546-A136-7076BC2EBDC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3188F75B-7D42-4064-AE2B-17ED3614FEAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3188F75B-7D42-4064-AE2B-17ED3614FEAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3188F75B-7D42-4064-AE2B-17ED3614FEAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3188F75B-7D42-4064-AE2B-17ED3614FEAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10176BD0-B4C5-44D6-A335-B9792E72E7EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10176BD0-B4C5-44D6-A335-B9792E72E7EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10176BD0-B4C5-44D6-A335-B9792E72E7EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10176BD0-B4C5-44D6-A335-B9792E72E7EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4816956-7EA0-4B78-8BB5-A2ACA4AAA24F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4816956-7EA0-4B78-8BB5-A2ACA4AAA24F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4816956-7EA0-4B78-8BB5-A2ACA4AAA24F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4816956-7EA0-4B78-8BB5-A2ACA4AAA24F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -69,6 +87,9 @@ Global
 		{3C314B00-C67E-4471-8CF7-A6AC3A2B22F5} = {9D4A8E00-7955-40CE-9F56-8C7B7F29B07B}
 		{67E1EF1F-7553-43C3-9E5B-D0AA166E4106} = {7E4726C2-57AD-405C-B2B3-34931C6A375F}
 		{11A0DF5A-9D1B-4546-A136-7076BC2EBDC9} = {25406F21-862D-4500-BF81-C3F7442F053C}
+		{3188F75B-7D42-4064-AE2B-17ED3614FEAB} = {9D4A8E00-7955-40CE-9F56-8C7B7F29B07B}
+		{10176BD0-B4C5-44D6-A335-B9792E72E7EB} = {9D4A8E00-7955-40CE-9F56-8C7B7F29B07B}
+		{D4816956-7EA0-4B78-8BB5-A2ACA4AAA24F} = {9D4A8E00-7955-40CE-9F56-8C7B7F29B07B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {325C1610-39CA-4DF2-A36D-22EBB2321E97}
