@@ -156,45 +156,43 @@ public static class FileExtensions
 
 		data.Position = 0;
 
-		using (var reader = new BinaryReader(data))
-		{
-			if (ext.Equals(".txt") || ext.Equals(".csv") || ext.Equals(".prn"))
-			{
-				// Limits characters to ASCII encoding.
-				for (var i = 0; i < data.Length; i++)
-				{
-					if (reader.ReadByte() > sbyte.MaxValue)
-					{
-						return false;
-					}
-				}
+        using var reader = new BinaryReader(data);
+        if (ext.Equals(".txt") || ext.Equals(".csv") || ext.Equals(".prn"))
+        {
+            // Limits characters to ASCII encoding.
+            for (var i = 0; i < data.Length; i++)
+            {
+                if (reader.ReadByte() > sbyte.MaxValue)
+                {
+                    return false;
+                }
+            }
 
-				return true;
-			}
+            return true;
+        }
 
-			// Uncomment the following code block if you must permit
-			// files whose signature isn't provided in the FileSignatures
-			// dictionary. We recommend that you add file signatures
-			// for files (when possible) for all file types you intend
-			// to allow on the system and perform the file signature
-			// check.
-			if (!FileSignatures.ContainsKey(ext) && allowUnknownSignatures)
-			{
-				return true;
-			}
+        // Uncomment the following code block if you must permit
+        // files whose signature isn't provided in the FileSignatures
+        // dictionary. We recommend that you add file signatures
+        // for files (when possible) for all file types you intend
+        // to allow on the system and perform the file signature
+        // check.
+        if (!FileSignatures.ContainsKey(ext) && allowUnknownSignatures)
+        {
+            return true;
+        }
 
-			// File signature check
-			// --------------------
-			// With the file signatures provided in the FileSignatures
-			// dictionary, the following code tests the input content's
-			// file signature.
-			var signatures = FileSignatures[ext];
-			var headerBytes = reader.ReadBytes(signatures.Max(m => m.Length));
+        // File signature check
+        // --------------------
+        // With the file signatures provided in the FileSignatures
+        // dictionary, the following code tests the input content's
+        // file signature.
+        var signatures = FileSignatures[ext];
+        var headerBytes = reader.ReadBytes(signatures.Max(m => m.Length));
 
-			return signatures.Any(signature =>
-				headerBytes.Take(signature.Length).SequenceEqual(signature));
-		}
-	}
+        return signatures.Any(signature =>
+            headerBytes.Take(signature.Length).SequenceEqual(signature));
+    }
 
 	/// <summary>
 	/// Obtiene el mimetype en base a una extensión
@@ -218,11 +216,11 @@ public static class FileExtensions
 
 	private static readonly IDictionary<string, string> FileMappings = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase)
 	{
-            #region Big freaking list of mime types
-            // combination of values from Windows 7 Registry and 
-            // from C:\Windows\System32\inetsrv\config\applicationHost.config
-            // some added, including .7z and .dat
-            {".323", "text/h323"},
+        #region Big freaking list of mime types
+        // combination of values from Windows 7 Registry and 
+        // from C:\Windows\System32\inetsrv\config\applicationHost.config
+        // some added, including .7z and .dat
+        {".323", "text/h323"},
 		{".3g2", "video/3gpp2"},
 		{".3gp", "video/3gpp"},
 		{".3gp2", "video/3gpp2"},
@@ -782,7 +780,7 @@ public static class FileExtensions
 		{".xtp", "application/octet-stream"},
 		{".xwd", "image/x-xwindowdump"},
 		{".z", "application/x-compress"},
-		{".zip", "application/x-zip-compressed"},
-            #endregion
-        };
+		{".zip", "application/x-zip-compressed"}
+        #endregion
+    };
 }

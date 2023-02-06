@@ -34,12 +34,9 @@ public class WebAppsStartup
         }
 
         app.UseHttpsRedirection();
+        app.UseCustomHeaders();
         app.UseStaticFiles();
         app.UseSpaStaticFiles();
-        if (!env.IsDevelopment())
-        {
-            app.UseSpaStaticFiles();
-        }
         app.UseRouting();
 
         app.UseEndpoints(endpoints =>

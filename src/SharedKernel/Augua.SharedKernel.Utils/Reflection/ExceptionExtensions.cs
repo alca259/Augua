@@ -3,6 +3,9 @@ using System.Text;
 
 namespace System;
 
+/// <summary>
+/// Extensiones de excepciones
+/// </summary>
 public static class ExceptionExtensions
 {
 	/// <summary>

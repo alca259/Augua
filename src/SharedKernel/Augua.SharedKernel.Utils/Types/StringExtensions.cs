@@ -3,15 +3,18 @@ using System.Text.RegularExpressions;
 
 namespace System;
 
+/// <summary>
+/// Extensiones de texto
+/// </summary>
 public static class StringExtensions
 {
 	/// <summary>
 	/// Compara 2 cadenas de string ignorando mayus/minus. Opcionalmente, puede decir que elimine los espacios iniciales y finales de las cadenas a comparar
 	/// </summary>
-	/// <param name="value"></param>
-	/// <param name="compare"></param>
-	/// <param name="trim"></param>
-	/// <returns></returns>
+	/// <param name="value">Valor inicial.</param>
+	/// <param name="compare">Valor comparable.</param>
+	/// <param name="trim">Indica si eliminará espacios al inicio y al final de ambos string al comparar.</param>
+	/// <returns>Si son iguales o no.</returns>
 	public static bool EqualsIgnoreCase(this string value, string compare, bool trim = false)
 	{
 		if (trim)

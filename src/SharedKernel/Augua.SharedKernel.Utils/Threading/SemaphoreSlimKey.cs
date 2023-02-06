@@ -1,9 +1,10 @@
 ﻿namespace System.Threading;
 
 /// <summary>
-/// Semáforo con clave
+/// Semáforo con clave.
 /// </summary>
-/// https://stackoverflow.com/questions/31138179/asynchronous-locking-based-on-a-key
+/// <remarks>Las claves son estáticas a toda la aplicación.</remarks>
+/// <see href="https://stackoverflow.com/questions/31138179/asynchronous-locking-based-on-a-key"/>
 public sealed class SemaphoreSlimKey
 {
 	/// <summary>
@@ -29,7 +30,7 @@ public sealed class SemaphoreSlimKey
 	/// </summary>
 	/// <param name="initialCount">The initial number of requests for the semaphore that can be granted concurrently.</param>
 	/// <param name="maxCount">The maximum number of requests for the semaphore that can be granted concurrently.</param>
-	/// <exception cref="System.ArgumentOutOfRangeException">initialCount is less than 0, or initialCount is greater than maxCount, or maxCount is equal to or less than 0.
+	/// <exception cref="ArgumentOutOfRangeException">initialCount is less than 0, or initialCount is greater than maxCount, or maxCount is equal to or less than 0.
 	/// </exception>
 	public SemaphoreSlimKey(uint initialCount, uint maxCount)
 	{
@@ -110,7 +111,7 @@ public sealed class SemaphoreSlimKey
 	/// Number of semaphores
 	/// </summary>
 	/// <returns></returns>
-	public int Count()
+	public static int Count()
 	{
 		lock (_semaphores)
 		{
@@ -122,7 +123,7 @@ public sealed class SemaphoreSlimKey
 	/// Number of references of semaphores by key
 	/// </summary>
 	/// <returns></returns>
-	public int Count(object key)
+	public static int Count(object key)
 	{
 		lock (_semaphores)
 		{
@@ -137,7 +138,7 @@ public sealed class SemaphoreSlimKey
 	/// Release a semaphore by key
 	/// </summary>
 	/// <param name="key"></param>
-	public void Release(object key)
+	public static void Release(object key)
 	{
 		lock (_semaphores)
 		{
@@ -156,7 +157,7 @@ public sealed class SemaphoreSlimKey
 	/// <summary>
 	/// Release all semaphores
 	/// </summary>
-	public void ReleaseAll()
+	public static void ReleaseAll()
 	{
 		lock (_semaphores)
 		{

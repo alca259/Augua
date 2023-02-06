@@ -7,7 +7,7 @@ public class AppSettings : ICloneable
     public string CdnUrl { get; set; }
     public string ClientID { get; set; }
     public int LevelLog { get; set; } = LogLevel.Warn;
-    public string AppName { get; set; } = "Claroluz";
+    public string AppName { get; set; } = "Augua";
 
     public object Clone()
     {

@@ -2,6 +2,9 @@
 
 namespace System;
 
+/// <summary>
+/// Extensiones de fechas
+/// </summary>
 public static class DateTimeExtensions
 {
 	#region Getters

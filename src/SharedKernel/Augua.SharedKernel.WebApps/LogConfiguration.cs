@@ -9,8 +9,8 @@ public static class LogConfiguration
         var loggerConf = new LoggerConfiguration()
             .MinimumLevel.Debug()
             .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+            .MinimumLevel.Override("Microsoft.AspNetCore.Authentication", LogEventLevel.Information)
             .MinimumLevel.Override("System", LogEventLevel.Warning)
-            .MinimumLevel.Override("Hangfire", LogEventLevel.Warning)
             .Enrich.WithProperty("ApplicationContext", Namespace)
             .Enrich.FromLogContext();
 

@@ -1,5 +1,8 @@
 ﻿namespace System.Reflection;
 
+/// <summary>
+/// Extensiones genéricas de objetos.
+/// </summary>
 public static class ObjectExtensions
 {
 	/// <summary>

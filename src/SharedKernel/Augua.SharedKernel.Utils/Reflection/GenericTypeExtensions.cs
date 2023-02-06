@@ -1,5 +1,8 @@
 ﻿namespace System.Reflection;
 
+/// <summary>
+/// Extensiones de tipos genéricos
+/// </summary>
 public static class GenericTypeExtensions
 {
 	public static string GetGenericTypeName(this Type type)
