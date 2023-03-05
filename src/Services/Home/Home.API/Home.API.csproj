@@ -8,25 +8,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-        <PackageReference Include="Dapper" Version="2.0.*" />
-        <PackageReference Include="Hellang.Middleware.ProblemDetails" Version="6.*" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.*" />
-        <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.*" />
-        <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.*" />
-        <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.*" />
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.*" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="6.0.*" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.*" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.NetTopologySuite" Version="6.0.*" />
-        <PackageReference Include="Polly" Version="7.2.*" />
-        <PackageReference Include="Serilog.AspNetCore" Version="6.*" />
-        <PackageReference Include="Serilog.Sinks.Console" Version="4.*" />
-        <PackageReference Include="Serilog.Sinks.File" Version="5.*" />
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.*" />
+	  <ProjectReference Include="..\..\..\Shared\SharedKernel.Utils\SharedKernel.Utils.csproj" />
+	  <ProjectReference Include="..\Home.Infrastructure\Home.Infrastructure.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\..\Shared\SharedKernel.Utils\SharedKernel.Utils.csproj" />
+	  <Folder Include="API\" />
+	  <Folder Include="Controllers\" />
 	</ItemGroup>
 	
 </Project>
