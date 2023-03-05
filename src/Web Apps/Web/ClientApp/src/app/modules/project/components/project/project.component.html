@@ -1,0 +1,4 @@
+<h5>Title: {{ project?.title }}</h5>
+<h6>Description: {{ project?.description }}</h6>
+<p>Completed: {{ project?.completed ? 'Yes' : 'No' }}</p>
+<button (click)="deleteProject()">Delete</button>
