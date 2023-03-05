@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Nullable>disable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<TypeScriptToolsVersion>4.8</TypeScriptToolsVersion>
+		<RootNamespace>Web</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Folder Include="ClientApp\src\app\" />
+		<Folder Include="ClientApp\src\assets\" />
+		<Folder Include="ClientApp\src\environments\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\Shared\SharedKernel.WebApps\SharedKernel.WebApps.csproj" />
+	</ItemGroup>
+
+</Project>
