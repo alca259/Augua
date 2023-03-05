@@ -4,6 +4,7 @@ export enum Levels {
 }
 
 export interface IProject {
+    id: number;
     title: string;
     description?: string;
     completed: boolean;

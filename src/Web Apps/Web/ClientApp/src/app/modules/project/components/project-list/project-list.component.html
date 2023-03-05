@@ -1,4 +1,17 @@
 <h4>Proyectos:</h4>
 
-<app-project [project]="proyecto1" (deleteEvent)="deleteProject($event)"></app-project>
-<app-project [project]="proyecto2" (deleteEvent)="deleteProject($event)"></app-project>
+<table border="1">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Completed</th>
+            <th>Level</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr app-project *ngFor="let item of allProjects" [project]="item" (deleteEvent)="deleteProject($event)">
+        </tr>
+    </tbody>
+</table>

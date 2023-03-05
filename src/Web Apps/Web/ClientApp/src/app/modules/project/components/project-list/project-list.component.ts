@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { IProject, Levels } from '../../models/interfaces/Project.interface';
+import { ProjectApiService } from '../../services/public/project-api.service';
 
 @Component({
   selector: 'app-project-list',
@@ -8,24 +9,14 @@ import { IProject, Levels } from '../../models/interfaces/Project.interface';
 })
 export class ProjectListComponent implements OnInit {
 
-  proyecto1: IProject = {
-    title: 'Project 1',
-    description: 'Description 1',
-    completed: false,
-    level: Levels.Info
-  };
+  allProjects : IProject[] = [];
 
-  proyecto2: IProject = {
-    title: 'Project 2',
-    description: 'Description 2',
-    completed: true,
-    level: Levels.Urgent
-  };
-
-  constructor() {}
+  constructor(
+    private projectService : ProjectApiService
+  ) {}
 
   ngOnInit(): void {
-
+    this.allProjects = this.projectService.getAllProjects();
   }
 
   deleteProject(project: IProject){

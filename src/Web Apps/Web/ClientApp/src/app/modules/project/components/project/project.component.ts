@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { IProject } from '../../models/interfaces/Project.interface';
 
 @Component({
-  selector: 'app-project',
+  selector: 'tr [app-project]',
   templateUrl: './project.component.html',
   styleUrls: ['./project.component.scss']
 })
