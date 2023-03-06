@@ -1,34 +1,19 @@
 ﻿namespace Home.API.Extensions;
 
-public sealed class AppConfiguration
+public static class AppConfiguration
 {
-    public static IConfiguration GetConfiguration<T>() where T : class
+    public static WebApplicationBuilder GetConfiguration<T>(this WebApplicationBuilder builder) where T : class
     {
         var isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
 
-        var buildconfig = new ConfigurationBuilder()
+        builder.Configuration
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
             .AddEnvironmentVariables();
 
         if (isDevelopment)
-            buildconfig.AddUserSecrets<T>();
+            builder.Configuration.AddUserSecrets<T>();
 
-        var config = buildconfig.Build();
-
-        var appconfiguration = config.GetConnectionString("AppConfiguration");
-
-        if (appconfiguration.IsNullOrWhiteSpace())
-            return config;
-
-        buildconfig = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-            .AddEnvironmentVariables();
-
-        if (isDevelopment)
-            buildconfig.AddUserSecrets<T>();
-
-        return buildconfig.Build();
+        return builder;
     }
 }

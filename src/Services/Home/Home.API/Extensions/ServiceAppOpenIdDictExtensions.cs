@@ -151,7 +151,8 @@ public static class ServiceAppOpenIdDictExtensions
             .AddCore(opt =>
             {
                 opt.UseEntityFrameworkCore()
-                   .UseDbContext<HomeDbContext>();
+                   .UseDbContext<HomeDbContext>()
+                   .ReplaceDefaultEntities<AuthApplication, AuthAuthorization, AuthScope, AuthToken, long>();
             })
             .AddServer(opt =>
             {

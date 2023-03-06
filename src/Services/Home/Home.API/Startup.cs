@@ -2,6 +2,7 @@
 using Home.API.Extensions;
 using Home.API.Services;
 using Home.Domain.Identity;
+using Home.Infrastructure;
 using Home.Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -32,10 +33,15 @@ public sealed class Startup
     {
         services.AddControllers();
         services.AddMvcCore().AddRazorViewEngine();
+        services.AddProblemDetails();
+        services.AddHealthChecks();
 
         services.AddDbContext<HomeDbContext>(opt =>
         {
-            opt.UseSqlServer(_configuration.GetConnectionString("Default"));
+            opt.UseSqlServer(_configuration.GetConnectionString("Default"), options =>
+            {
+                options.MigrationsAssembly(InfrastructureAssemblyReference.GetAssembly().FullName);
+            });
             opt.CustomizeOpenIdDictContext();
         });
 

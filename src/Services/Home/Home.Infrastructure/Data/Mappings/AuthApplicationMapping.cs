@@ -12,7 +12,7 @@ internal class AuthApplicationMapping : IEntityTypeConfiguration<AuthApplication
         builder.ToTable("AuthApplication");
 
         builder.Property(p => p.Id).HasColumnName("Id").UseIdentityColumn();
-        builder.Property(p => p.ClientId).HasColumnName("ClientId").HasMaxLength(100).IsUnicode();
+        builder.Property(p => p.ClientId).HasColumnName("ClientId").HasMaxLength(100).IsUnicode().IsRequired();
         builder.Property(p => p.ClientSecret).HasColumnName("ClientSecret").IsUnicode();
         builder.Property(p => p.ConcurrencyToken).HasColumnName("ConcurrencyToken").HasMaxLength(50).IsUnicode().IsConcurrencyToken();
         builder.Property(p => p.ConsentType).HasColumnName("ConsentType").HasMaxLength(50).IsUnicode();

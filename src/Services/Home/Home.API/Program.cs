@@ -1,4 +1,5 @@
 using Home.API.Extensions;
+using Home.Infrastructure.Data;
 
 namespace Home.API;
 
@@ -12,16 +13,31 @@ public class Program
         EnsureEnviromentVariable();
         try
         {
-            var configuration = AppConfiguration.GetConfiguration<Program>();
-            Log.Logger = LogConfiguration.CreateSerilog(configuration, typeof(Program).Assembly.GetName().Name);
+            var builder = WebApplication.CreateBuilder(args);
+            builder.GetConfiguration<Program>();
 
+            Log.Logger = LogConfiguration.CreateSerilog(builder.Configuration, typeof(Program).Assembly.GetName().Name);
             Log.Information("Configuring web host ({ApplicationContext})...", Namespace);
 
-            var host = CreateHostBuilder(configuration, args).Build();
+            var startup = new Startup(builder.Configuration, builder.Environment);
+            startup.ConfigureServices(builder.Services);
+
+            builder.WebHost.CaptureStartupErrors(false);
+            builder.WebHost.ConfigureKestrel(o => o.AddServerHeader = false);
+            builder.Host.UseContentRoot(Directory.GetCurrentDirectory());
+            builder.Host
+                .ConfigureLogging((hostingContext, logging) => logging.ClearProviders())
+                .UseSerilog();
+
+            var app = builder.Build();
+            
+            app.MigrateDatabase<HomeDbContext>();
+
+            startup.Configure(app, builder.Environment);
 
             Log.Information("Starting web host ({ApplicationContext})...", Namespace);
 
-            host.Run();
+            app.Run();
 
             return 0;
         }
@@ -34,51 +50,7 @@ public class Program
         {
             Log.CloseAndFlush();
         }
-
-        var builder = WebApplication.CreateBuilder(args);
-
-        // Add services to the container.
-        builder.Services.AddControllers();
-
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
-
-        var app = builder.Build();
-
-        // Configure the HTTP request pipeline.
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseSwagger();
-            app.UseSwaggerUI();
-        }
-
-        app.UseHttpsRedirection();
-
-        app.UseRouting();
-
-        app.UseAuthorization();
-
-        app.MapControllers();
-
-        app.Run();
     }
-
-    public static IHostBuilder CreateHostBuilder(IConfiguration configuration, string[] args)
-    {
-        return Host.CreateDefaultBuilder(args)
-            .ConfigureWebHostDefaults(webBuilder =>
-            {
-                webBuilder.CaptureStartupErrors(false);
-                webBuilder.UseStartup<Startup>().ConfigureKestrel((context, options) => options.AddServerHeader = false);
-                webBuilder.ConfigureAppConfiguration(x => x.AddConfiguration(configuration));
-                webBuilder.ConfigureKestrel(o => o.AddServerHeader = false);
-            })
-            .UseContentRoot(Directory.GetCurrentDirectory())
-            .ConfigureLogging((hostingContext, logging) => logging.ClearProviders())
-            .UseSerilog();
-    }
-
 
     private static void EnsureEnviromentVariable()
     {

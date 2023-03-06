@@ -12,8 +12,8 @@ internal class AuthTokenMapping : IEntityTypeConfiguration<AuthToken>
         builder.ToTable("AuthToken");
 
         builder.Property(p => p.Id).HasColumnName("Id").UseIdentityColumn();
-        builder.Property(p => p.FkApplicationID).HasColumnName("FkApplicationId").IsRequired();
-        builder.Property(p => p.FkAuthorizationID).HasColumnName("FkAuthorizationId").IsRequired();
+        builder.Property(p => p.ApplicationId).HasColumnName("ApplicationId").IsRequired();
+        builder.Property(p => p.AuthorizationId).HasColumnName("AuthorizationId").IsRequired();
         builder.Property(p => p.ConcurrencyToken).HasColumnName("ConcurrencyToken").HasMaxLength(50).IsUnicode().IsConcurrencyToken();
         builder.Property(p => p.CreationDate).HasColumnName("CreationDate");
         builder.Property(p => p.ExpirationDate).HasColumnName("ExpirationDate");
@@ -25,11 +25,11 @@ internal class AuthTokenMapping : IEntityTypeConfiguration<AuthToken>
         builder.Property(p => p.Subject).HasColumnName("Subject").HasMaxLength(400).IsUnicode();
         builder.Property(p => p.Type).HasColumnName("Type").HasMaxLength(50).IsUnicode();
 
-        builder.HasOne(fk => fk.Application).WithMany(m => m.Tokens).HasForeignKey(fk => fk.FkApplicationID).OnDelete(DeleteBehavior.Cascade);
-        builder.HasOne(fk => fk.Authorization).WithMany(m => m.Tokens).HasForeignKey(fk => fk.FkAuthorizationID).OnDelete(DeleteBehavior.NoAction);
+        builder.HasOne(fk => fk.Application).WithMany(m => m.Tokens).HasForeignKey(fk => fk.ApplicationId).OnDelete(DeleteBehavior.Cascade);
+        builder.HasOne(fk => fk.Authorization).WithMany(m => m.Tokens).HasForeignKey(fk => fk.AuthorizationId).OnDelete(DeleteBehavior.NoAction);
 
         builder.HasIndex(i => i.ReferenceId).HasDatabaseName("IX_AuthToken_ReferenceId").IsUnique(true);
-        builder.HasIndex(i => i.FkAuthorizationID).HasDatabaseName("IX_AuthToken_AuthorizationId").IsUnique(false);
-        builder.HasIndex(i => new { i.FkApplicationID, i.Status, i.Subject, i.Type }).HasDatabaseName("IX_AuthToken_ApplicationId_Status_Subject_Type").IsUnique(false);
+        builder.HasIndex(i => i.AuthorizationId).HasDatabaseName("IX_AuthToken_AuthorizationId").IsUnique(false);
+        builder.HasIndex(i => new { i.ApplicationId, i.Status, i.Subject, i.Type }).HasDatabaseName("IX_AuthToken_ApplicationId_Status_Subject_Type").IsUnique(false);
     }
 }
