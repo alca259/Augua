@@ -9,6 +9,7 @@ using static OpenIddict.Abstractions.OpenIddictConstants;
 
 namespace Home.API.Controllers;
 
+[ApiExplorerSettings(IgnoreApi = true)]
 public sealed class UserInfoController : Controller
 {
     private readonly UserManager<User> _userManager;

@@ -47,6 +47,7 @@ public sealed class SeedInitTask : IHostedService
             ConsentType = ConsentTypes.Implicit,
             RedirectUris =
             {
+                new Uri($"{Startup.AUTH_URI}/oauth2-redirect.html"),
                 new Uri($"{Startup.AUTH_URI}/swagger/oauth2-redirect.html"),
                 new Uri($"{Startup.AUTH_URI}/signin-oidc"),
                 new Uri($"{Startup.AUTH_URI}/signout-oidc")
@@ -140,6 +141,7 @@ public sealed class SeedInitTask : IHostedService
 
         var user = new User
         {
+            Id = Guid.NewGuid().ToString(),
             UserName = "administrator",
             FkUserRoles = new List<UserRole>
             {
@@ -147,6 +149,7 @@ public sealed class SeedInitTask : IHostedService
                 {
                     FkRole = new Role
                     {
+                        Id = Guid.NewGuid().ToString(),
                         Name = "admin",
                         NormalizedName = "ADMIN"
                     }

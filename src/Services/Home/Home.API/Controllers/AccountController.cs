@@ -8,6 +8,7 @@ using System.Security.Principal;
 namespace Home.API.Controllers;
 
 [Route("account")]
+[ApiExplorerSettings(IgnoreApi = true)]
 public sealed class AccountController : Controller
 {
     private readonly UserManager<User> _userManager;

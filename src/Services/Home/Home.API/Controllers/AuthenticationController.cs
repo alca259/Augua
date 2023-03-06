@@ -11,6 +11,7 @@ using static OpenIddict.Abstractions.OpenIddictConstants;
 
 namespace Home.API.Controllers;
 
+[ApiExplorerSettings(IgnoreApi = true)]
 public sealed class AuthenticationController : Controller
 {
     private readonly IOpenIddictApplicationManager _applicationManager;
