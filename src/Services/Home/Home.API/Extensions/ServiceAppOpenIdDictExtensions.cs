@@ -13,7 +13,7 @@ public static class ServiceAppOpenIdDictExtensions
     public static DbContextOptionsBuilder CustomizeOpenIdDictContext(this DbContextOptionsBuilder builder)
     {
         // Using the generic overload because I need to replace the default OpenIddict entities.
-        builder.UseOpenIddict<AuthApplication, AuthAuthorization, AuthScope, AuthToken, string>();
+        builder.UseOpenIddict<AuthApplication, AuthAuthorization, AuthScope, AuthToken, long>();
         return builder;
     }
 

@@ -2,6 +2,6 @@
 
 namespace Home.Domain.Identity;
 
-public class AuthScope : OpenIddictEntityFrameworkCoreScope<string>
+public class AuthScope : OpenIddictEntityFrameworkCoreScope<long>
 {
 }

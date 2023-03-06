@@ -2,7 +2,7 @@
 
 namespace Home.Domain.Identity;
 
-public class AuthAuthorization : OpenIddictEntityFrameworkCoreAuthorization<string, AuthApplication, AuthToken>
+public class AuthAuthorization : OpenIddictEntityFrameworkCoreAuthorization<long, AuthApplication, AuthToken>
 {
-    public string FkApplicationID { get; set; }
+    public long FkApplicationID { get; set; }
 }

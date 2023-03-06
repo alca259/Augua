@@ -11,8 +11,8 @@ internal class AuthAuthorizationMapping : IEntityTypeConfiguration<AuthAuthoriza
         builder.HasKey(pk => pk.Id);
         builder.ToTable("AuthAuthorization");
 
-        builder.Property(p => p.Id).HasColumnName("Id").IsRequired().HasMaxLength(256).IsUnicode();
-        builder.Property(p => p.FkApplicationID).HasColumnName("FkApplicationId").HasMaxLength(256).IsUnicode();
+        builder.Property(p => p.Id).HasColumnName("Id").UseIdentityColumn();
+        builder.Property(p => p.FkApplicationID).HasColumnName("FkApplicationId").IsRequired();
         builder.Property(p => p.ConcurrencyToken).HasColumnName("ConcurrencyToken").HasMaxLength(50).IsUnicode().IsConcurrencyToken();
         builder.Property(p => p.CreationDate).HasColumnName("CreationDate");
         builder.Property(p => p.Properties).HasColumnName("Properties").IsUnicode();

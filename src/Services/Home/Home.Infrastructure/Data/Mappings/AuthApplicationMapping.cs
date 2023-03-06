@@ -11,7 +11,7 @@ internal class AuthApplicationMapping : IEntityTypeConfiguration<AuthApplication
         builder.HasKey(pk => pk.Id);
         builder.ToTable("AuthApplication");
 
-        builder.Property(p => p.Id).HasColumnName("Id").IsRequired().HasMaxLength(256).IsUnicode();
+        builder.Property(p => p.Id).HasColumnName("Id").UseIdentityColumn();
         builder.Property(p => p.ClientId).HasColumnName("ClientId").HasMaxLength(100).IsUnicode();
         builder.Property(p => p.ClientSecret).HasColumnName("ClientSecret").IsUnicode();
         builder.Property(p => p.ConcurrencyToken).HasColumnName("ConcurrencyToken").HasMaxLength(50).IsUnicode().IsConcurrencyToken();

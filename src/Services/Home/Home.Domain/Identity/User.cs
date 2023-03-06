@@ -2,7 +2,7 @@
 
 namespace Home.Domain.Identity;
 
-public class User : IdentityUser<long>
+public class User : IdentityUser<string>
 {
     public virtual List<UserClaim> FkUserClaims { get; set; }
     public virtual List<UserRole> FkUserRoles { get; set; }

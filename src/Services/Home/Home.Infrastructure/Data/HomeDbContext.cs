@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Home.Infrastructure.Data;
 
-public class HomeDbContext : IdentityDbContext<User, Role, long, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>
+public class HomeDbContext : IdentityDbContext<User, Role, string, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>
 {
     public HomeDbContext(DbContextOptions<HomeDbContext> options) : base(options)
     {

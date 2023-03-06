@@ -2,6 +2,6 @@
 
 namespace Home.Domain.Identity;
 
-public class AuthApplication : OpenIddictEntityFrameworkCoreApplication<string, AuthAuthorization, AuthToken>
+public class AuthApplication : OpenIddictEntityFrameworkCoreApplication<long, AuthAuthorization, AuthToken>
 {
 }

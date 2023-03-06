@@ -2,6 +2,6 @@
 
 namespace Home.Domain.Identity;
 
-public class UserLogin : IdentityUserLogin<long>
+public class UserLogin : IdentityUserLogin<string>
 {
 }

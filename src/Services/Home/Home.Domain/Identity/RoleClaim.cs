@@ -2,6 +2,6 @@
 
 namespace Home.Domain.Identity;
 
-public class RoleClaim : IdentityRoleClaim<long>
+public class RoleClaim : IdentityRoleClaim<string>
 {
 }
