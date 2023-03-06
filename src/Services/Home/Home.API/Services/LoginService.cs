@@ -50,10 +50,9 @@ public class LoginService : ILoginService<User>
         return _signInManager.SignInAsync(user, true);
     }
 
-    public Task SignInAsync(User user, string returnUrl, bool rememberLogin,
-        IEnumerable<Claim> aditionalClaims = null)
+    public Task SignInAsync(User user, string returnUrl, bool rememberLogin, IEnumerable<Claim> aditionalClaims = null)
     {
-        _logger.LogDebug($"SignIn User {user.UserName}  returnUrl {returnUrl}  rememberLogin {rememberLogin} {{aditionalClaims}}", aditionalClaims);
+        _logger.LogDebug("SignIn User: {userName} ReturnUrl: {returnUrl} RememberLogin: {rememberLogin} Claims: {aditionalClaims}", user.UserName, returnUrl, rememberLogin, aditionalClaims);
 
         var cookieLife = _configuration.GetValue<double?>("AccountOptions:CookieLifetime");
         var props = new AuthenticationProperties
@@ -63,8 +62,7 @@ public class LoginService : ILoginService<User>
             RedirectUri = returnUrl
         };
 
-        if (_configuration.GetValue("AccountOptions:AllowRememberLogin", false)
-            && rememberLogin)
+        if (_configuration.GetValue("AccountOptions:AllowRememberLogin", false) && rememberLogin)
         {
             var PermanentCookieLifetimeDays = _configuration.GetValue("AccountOptions:PermanentCookieLifetimeDays", 365);
 

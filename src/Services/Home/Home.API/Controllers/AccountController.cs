@@ -82,6 +82,21 @@ public sealed class AccountController : Controller
         return View(vm);
     }
 
+    [HttpGet("logout")]
+    public async Task<IActionResult> LogOff()
+    {
+        await _loginService.SignOutAsync();
+        return RedirectToAction(nameof(Login));
+    }
+
+    [HttpPost("logout")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> LogOffPost()
+    {
+        await _loginService.SignOutAsync();
+        return RedirectToAction(nameof(Login));
+    }
+
     private async Task<IActionResult> RedirectSuccessLogin(string returnUrl, bool rememberLogin, User userApp, bool signIn = true)
     {
         _logger.LogDebug("User: {User} RedirectSuccessLogin", userApp.UserName);
