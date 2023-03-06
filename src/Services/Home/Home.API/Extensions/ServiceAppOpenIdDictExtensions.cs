@@ -1,9 +1,15 @@
-﻿using Home.Domain.Identity;
+﻿using Home.API.API.Filters;
+using Home.Domain.Identity;
 using Home.Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using OpenIddict.Abstractions;
+using OpenIddict.Client;
+using OpenIddict.Validation.AspNetCore;
 
 namespace Home.API.Extensions;
 
@@ -17,12 +23,131 @@ public static class ServiceAppOpenIdDictExtensions
         return builder;
     }
 
-    /// <summary>Act as server</summary>
+    /// <summary>Configure as OpenIDDict server and self-client</summary>
+    public static IServiceCollection CustomizeOpenIdDictAsServerAndClient(this IServiceCollection services, IHostEnvironment environment, string apiName, string authUri, string clientID, string clientSecret, HashSet<string> scopes)
+    {
+        services
+            .CustomizeAuthenticationAsClient(authUri, clientID, clientSecret)
+            .AddOpenIddict()
+            .SetupOpenIdDictAsServer(environment, apiName)
+            .SetupOpenIdDictAsClient(authUri, clientID, clientSecret, scopes);
+
+        services.AddScoped<IAuthorizationHandler, RequireScopeHandler>();
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy("Default", cfg =>
+            {
+                cfg.Requirements.Add(new RequireScope(Startup.API_NAME));
+            });
+        });
+
+        return services;
+    }
+
+    /// <summary>Configure as OpenIDDict client</summary>
+    public static IServiceCollection CustomizeOpenIdDictAsClient(this IServiceCollection services, string authUri, string clientID, string clientSecret, HashSet<string> scopes)
+    {
+        services
+            .CustomizeAuthenticationAsClient(authUri, clientID, clientSecret)
+            .AddOpenIddict()
+            .SetupOpenIdDictAsClient(authUri, clientID, clientSecret, scopes);
+
+        services.AddScoped<IAuthorizationHandler, RequireScopeHandler>();
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy("Default", cfg =>
+            {
+                cfg.Requirements.Add(new RequireScope(Startup.API_NAME));
+            });
+        });
+
+        return services;
+    }
+
+    /// <summary>Configure as OpenIDDict server</summary>
     public static IServiceCollection CustomizeOpenIdDictAsServer(this IServiceCollection services, IHostEnvironment environment, string apiName)
     {
-        services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme);
+        services
+            .CustomizeAuthenticationAsServer()
+            .AddOpenIddict()
+            .SetupOpenIdDictAsServer(environment, apiName);
 
-        services.AddOpenIddict()
+        return services;
+    }
+
+    /// <summary>Setup Identity</summary>
+    public static IServiceCollection CustomizeIdentityServer(this IServiceCollection services)
+    {
+        services.AddIdentity<User, Role>()
+            .AddEntityFrameworkStores<HomeDbContext>()
+            .AddDefaultTokenProviders()
+            .AddSignInManager()
+            .AddUserManager<UserManager<User>>()
+            .AddRoleManager<RoleManager<Role>>();
+
+        services.Configure<IdentityOptions>(opt =>
+        {
+            opt.Password.RequiredLength = 0;
+            opt.Password.RequiredUniqueChars = 0;
+            opt.Password.RequireDigit = false;
+            opt.Password.RequireLowercase = false;
+            opt.Password.RequireNonAlphanumeric = false;
+            opt.Password.RequireUppercase = false;
+
+            opt.SignIn.RequireConfirmedAccount = false;
+            opt.SignIn.RequireConfirmedEmail = false;
+            opt.SignIn.RequireConfirmedPhoneNumber = false;
+
+            opt.CustomizeOpenIdDictIdentityOptions();
+        });
+
+        return services;
+    }
+
+    /// <summary>Setup Identity options with OpenIdDict</summary>
+    private static IdentityOptions CustomizeOpenIdDictIdentityOptions(this IdentityOptions options)
+    {
+        // Mapeamos Identity para que use los nombres de los claims de OpenIDDict (aunque creo que son exactamente los mismos)
+        options.ClaimsIdentity.UserNameClaimType = OpenIddictConstants.Claims.Username;
+        options.ClaimsIdentity.UserIdClaimType = OpenIddictConstants.Claims.Subject;
+        options.ClaimsIdentity.RoleClaimType = OpenIddictConstants.Claims.Role;
+        options.ClaimsIdentity.EmailClaimType = OpenIddictConstants.Claims.Email;
+
+        return options;
+    }
+
+    private static IServiceCollection CustomizeAuthenticationAsServer(this IServiceCollection services)
+    {
+        services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme);
+        return services;
+    }
+
+    private static IServiceCollection CustomizeAuthenticationAsClient(this IServiceCollection services, string authUri, string clientID, string clientSecret)
+    {
+        services.AddAuthentication(options =>
+        {
+            options.DefaultScheme = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+        })
+        .AddCookie()
+        .AddOpenIdConnect(options =>
+        {
+            options.Authority = authUri;
+            options.ClientId = clientID;
+            options.ClientSecret = clientSecret;
+
+            options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            options.ResponseType = OpenIdConnectResponseType.Token;
+
+            options.SaveTokens = true;
+            options.GetClaimsFromUserInfoEndpoint = false;
+        });
+        return services;
+    }
+
+    private static OpenIddictBuilder SetupOpenIdDictAsServer(this OpenIddictBuilder builder, IHostEnvironment environment, string apiName)
+    {
+        return builder
             .AddCore(opt =>
             {
                 opt.UseEntityFrameworkCore()
@@ -101,48 +226,33 @@ public static class ServiceAppOpenIdDictExtensions
                 opt.UseLocalServer();
                 opt.UseAspNetCore();
             });
-
-        return services;
     }
 
-    /// <summary>Setup Identity options with OpenIdDict</summary>
-    public static IdentityOptions CustomizeOpenIdDictIdentityOptions(this IdentityOptions options)
+    private static OpenIddictBuilder SetupOpenIdDictAsClient(this OpenIddictBuilder builder, string authUri, string clientID, string clientSecret, HashSet<string> scopes)
     {
-        // Mapeamos Identity para que use los nombres de los claims de OpenIDDict (aunque creo que son exactamente los mismos)
-        options.ClaimsIdentity.UserNameClaimType = OpenIddictConstants.Claims.Username;
-        options.ClaimsIdentity.UserIdClaimType = OpenIddictConstants.Claims.Subject;
-        options.ClaimsIdentity.RoleClaimType = OpenIddictConstants.Claims.Role;
-        options.ClaimsIdentity.EmailClaimType = OpenIddictConstants.Claims.Email;
+        scopes ??= new HashSet<string>();
 
-        return options;
-    }
+        return builder
+            .AddClient(options =>
+            {
+                options.AddEphemeralEncryptionKey()
+                        .AddEphemeralSigningKey();
 
-    /// <summary>Setup Identity</summary>
-    public static IServiceCollection CustomizeIdentityServer(this IServiceCollection services)
-    {
-        services.AddIdentity<User, Role>()
-            .AddEntityFrameworkStores<HomeDbContext>()
-            .AddDefaultTokenProviders()
-            .AddSignInManager()
-            .AddUserManager<UserManager<User>>()
-            .AddRoleManager<RoleManager<Role>>();
+                options.UseSystemNetHttp();
 
-        services.Configure<IdentityOptions>(opt =>
-        {
-            opt.Password.RequiredLength = 0;
-            opt.Password.RequiredUniqueChars = 0;
-            opt.Password.RequireDigit = false;
-            opt.Password.RequireLowercase = false;
-            opt.Password.RequireNonAlphanumeric = false;
-            opt.Password.RequireUppercase = false;
+                var clientRegister = new OpenIddictClientRegistration
+                {
+                    Issuer = new Uri(authUri, UriKind.Absolute),
+                    ClientId = clientID,
+                    ClientSecret = clientSecret
+                };
 
-            opt.SignIn.RequireConfirmedAccount = false;
-            opt.SignIn.RequireConfirmedEmail = false;
-            opt.SignIn.RequireConfirmedPhoneNumber = false;
+                foreach (var scope in scopes)
+                {
+                    clientRegister.Scopes.Add(scope);
+                }
 
-            opt.CustomizeOpenIdDictIdentityOptions();
-        });
-
-        return services;
+                options.AddRegistration(clientRegister);
+            });
     }
 }

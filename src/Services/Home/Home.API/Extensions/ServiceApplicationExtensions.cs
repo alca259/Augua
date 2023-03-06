@@ -3,18 +3,21 @@ using Serilog.Context;
 using System.Security.Claims;
 using Newtonsoft.Json;
 using System.Net;
+using Microsoft.Net.Http.Headers;
+using Microsoft.OpenApi.Models;
 
 namespace Home.API.Extensions;
 
 public static class ServiceApplicationExtensions
 {
-    public static IServiceCollection CustomizeCors(this IServiceCollection services, string policyName)
+    #region Services builder
+    public static IServiceCollection CustomizeCors(this IServiceCollection services, string policyName, string authUri)
     {
         services.AddCors(opt =>
         {
             opt.AddPolicy(policyName, cfg => cfg
                 .AllowCredentials()
-                .WithOrigins("https://localhost:5020", "http://localhost:4200")
+                .WithOrigins(authUri, "http://localhost:4200")
                 .SetIsOriginAllowedToAllowWildcardSubdomains()
                 .AllowAnyHeader()
                 .AllowAnyMethod());
@@ -22,13 +25,80 @@ public static class ServiceApplicationExtensions
         return services;
     }
 
-    public static IApplicationBuilder UseCustomSwagger(this IApplicationBuilder app) => app
+    public static IServiceCollection CustomizeSwagger(this IServiceCollection services, string authUri, string apiName, string apiAuthUrl = null, string apiTokenUrl = null)
+    {
+        var apiAuthority = authUri;
+        var basePath = authUri;
+        var scopeName = apiName;
+
+        services.AddSwaggerGen(options =>
+        {
+            options.DescribeAllParametersInCamelCase();
+            options.SwaggerDoc("v1", new OpenApiInfo
+            {
+                Title = apiName,
+                Version = "v1",
+                Description = apiName + " HTTP",
+                Contact = new OpenApiContact
+                {
+                    Name = "Foo Company",
+                    Email = string.Empty,
+                    Url = new Uri("https://foo.com/"),
+                }
+            });
+
+            options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+            {
+                Flows = new OpenApiOAuthFlows
+                {
+                    Implicit = new OpenApiOAuthFlow
+                    {
+                        AuthorizationUrl = string.IsNullOrWhiteSpace(apiAuthUrl)
+                            ? new Uri($"{apiAuthority}/connect/authorize")
+                            : new Uri($"{apiAuthUrl}"),
+
+                        TokenUrl = string.IsNullOrWhiteSpace(apiTokenUrl)
+                            ? new Uri($"{apiAuthority}/connect/token")
+                            : new Uri($"{apiTokenUrl}"),
+
+                        Scopes = new Dictionary<string, string>
+                        {
+                            { scopeName, basePath }
+                        }
+                    }
+                },
+                Type = SecuritySchemeType.OAuth2,
+                In = ParameterLocation.Header,
+                Name = HeaderNames.Authorization
+
+            });
+            options.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "oauth2" }
+                    },
+                    new[] { scopeName }
+                }
+            });
+        });
+
+        return services;
+    }
+    #endregion
+
+    #region Middleware builder
+    public static IApplicationBuilder UseCustomSwagger(this IApplicationBuilder app, string apiName, string clientID, string clientSecret, string clientDisplayName) => app
         .UseSwagger()
         .UseSwaggerUI(setup =>
         {
-            setup.SwaggerEndpoint(string.Empty + "/swagger/v1/swagger.json", "Home API");
+            setup.SwaggerEndpoint(string.Empty + "/swagger/v1/swagger.json", apiName);
             setup.RoutePrefix = string.Empty;
-            setup.OAuthAppName("Home API Swagger UI");
+
+            setup.OAuthAppName($"{clientDisplayName} Swagger UI");
+            setup.OAuthClientId(clientID);
+            setup.OAuthClientSecret(clientSecret);
 
             setup.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None);
         });
@@ -85,4 +155,5 @@ public static class ServiceApplicationExtensions
                 diagnostic.Set("IpAddress", IPAddressHttpParser.GetIPAddress(context));
             };
         });
+    #endregion
 }
