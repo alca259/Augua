@@ -1,5 +1,8 @@
 using Home.API.API.DTOs;
+using Home.Domain.Identity;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OpenIddict.Abstractions;
 using OpenIddict.Validation.AspNetCore;
@@ -14,11 +17,17 @@ namespace Home.API.API.Controllers;
 public class WeatherForecastController : ControllerBase
 {
     private readonly IOpenIddictApplicationManager _applicationManager;
+    private readonly IOpenIddictAuthorizationManager _authorizationManager;
+    private readonly UserManager<User> _userManager;
 
     public WeatherForecastController(
-        IOpenIddictApplicationManager applicationManager)
+        IOpenIddictApplicationManager applicationManager,
+        IOpenIddictAuthorizationManager authorizationManager,
+        UserManager<User> userManager)
     {
         _applicationManager = applicationManager;
+        _authorizationManager = authorizationManager;
+        _userManager = userManager;
     }
 
     private static readonly string[] Summaries = new[]
@@ -39,18 +48,23 @@ public class WeatherForecastController : ControllerBase
     }
 
     [HttpGet("message")]
-    public async Task<IActionResult> GetMessage()
+    public async Task<IActionResult> GetMessage(CancellationToken token = default)
     {
         var sub = User.FindFirstValue(Claims.Subject);
         if (string.IsNullOrEmpty(sub))
             return BadRequest();
 
-        var test = await _applicationManager.ListAsync().ToListAsync();
+        var authorizations = (await _authorizationManager.FindBySubjectAsync(sub, token).ToListAsync(token)).Cast<AuthAuthorization>().ToList();
 
-        var client = await _applicationManager.FindByClientIdAsync(sub);
-        if (client == null)
+        if (!authorizations.Any())
             return BadRequest();
 
-        return Content($"{await _applicationManager.GetDisplayNameAsync(client)} has been successfully authenticated.");
+        authorizations = authorizations.OrderByDescending(o => o.CreationDate).ToList();
+
+        var application = await _applicationManager.FindByIdAsync(authorizations.First().ApplicationId.ToString(), token);
+        if (application == null)
+            return BadRequest();
+
+        return Content($"{await _applicationManager.GetDisplayNameAsync(application, token)} has been successfully authenticated.");
     }
 }

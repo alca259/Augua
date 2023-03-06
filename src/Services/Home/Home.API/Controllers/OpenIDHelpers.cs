@@ -17,14 +17,14 @@ public static class OpenIDHelpers
     /// To allow OpenIddict to serialize them, you must attach them a destination, that specifies
     /// whether they should be included in access tokens, in identity tokens or in both.
     /// </remarks>
-    public static IEnumerable<string> GetDestinations(Claim claim, ClaimsPrincipal principal)
+    public static IEnumerable<string> GetDestinations(Claim claim)
     {
         switch (claim.Type)
         {
             case Claims.Name:
                 yield return Destinations.AccessToken;
 
-                if (principal.HasScope(Scopes.Profile))
+                if (claim.Subject.HasScope(Scopes.Profile))
                     yield return Destinations.IdentityToken;
 
                 yield break;
@@ -32,7 +32,7 @@ public static class OpenIDHelpers
             case Claims.Email:
                 yield return Destinations.AccessToken;
 
-                if (principal.HasScope(Scopes.Email))
+                if (claim.Subject.HasScope(Scopes.Email))
                     yield return Destinations.IdentityToken;
 
                 yield break;
@@ -40,7 +40,7 @@ public static class OpenIDHelpers
             case Claims.Role:
                 yield return Destinations.AccessToken;
 
-                if (principal.HasScope(Scopes.Roles))
+                if (claim.Subject.HasScope(Scopes.Roles))
                     yield return Destinations.IdentityToken;
 
                 yield break;
