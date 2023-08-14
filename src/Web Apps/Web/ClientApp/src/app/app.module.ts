@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { BlogModule } from './modules/blog/blog.module';
@@ -23,6 +24,7 @@ import { RootComponentComponent } from './shared/components/root-component/root-
     AppRoutingModule,
     BrowserModule,
     BrowserAnimationsModule,
+    HttpClientModule,
 
     BlogModule,
     HomeModule,
